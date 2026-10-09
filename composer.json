@@ -1,5 +1,5 @@
 {
-    "name": "iummv/health-endpoint",
+    "name": "iummv/laravel-health",
     "description": "Token-protected /health and /health/errors routes for the IUM monitor.",
     "type": "library",
     "license": "proprietary",

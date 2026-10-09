@@ -1,4 +1,4 @@
-# iummv/health-endpoint
+# iummv/laravel-health
 
 Adds two token-protected JSON routes to a Laravel app for the IUM monitor to poll:
 
@@ -23,12 +23,12 @@ Hosting is not decided yet. Until it is, add the repository to the app's `compos
 
 ```json
 "repositories": [
-    { "type": "vcs", "url": "https://git.example.com/iummv/health-endpoint.git" }
+    { "type": "vcs", "url": "https://git.example.com/iummv/laravel-health.git" }
 ]
 ```
 
 ```bash
-composer require iummv/health-endpoint
+composer require iummv/laravel-health
 ```
 
 The service provider is auto-discovered. To change defaults beyond the environment values below, publish the config:
