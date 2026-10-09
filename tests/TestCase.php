@@ -1,17 +1,17 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Tests;
+namespace Iummv\LaravelHealth\Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Testing\TestResponse;
-use Iummv\HealthEndpoint\Errors\ErrorRecorder;
-use Iummv\HealthEndpoint\Errors\Fingerprint;
-use Iummv\HealthEndpoint\Errors\FrameResolver;
-use Iummv\HealthEndpoint\Errors\Occurrences;
-use Iummv\HealthEndpoint\HealthEndpointServiceProvider;
+use Iummv\LaravelHealth\Errors\ErrorRecorder;
+use Iummv\LaravelHealth\Errors\Fingerprint;
+use Iummv\LaravelHealth\Errors\FrameResolver;
+use Iummv\LaravelHealth\Errors\Occurrences;
+use Iummv\LaravelHealth\LaravelHealthServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -51,7 +51,7 @@ abstract class TestCase extends Orchestra
 
     protected function getPackageProviders($app): array
     {
-        return [HealthEndpointServiceProvider::class];
+        return [LaravelHealthServiceProvider::class];
     }
 
     protected function defineEnvironment($app): void
@@ -78,7 +78,7 @@ abstract class TestCase extends Orchestra
             'database' => 'testing',
             'table' => 'failed_jobs',
         ]);
-        $app['config']->set('health-endpoint.token', self::TOKEN);
+        $app['config']->set('laravel-health.token', self::TOKEN);
     }
 
     protected function health(array $headers = ['X-Health-Token' => self::TOKEN]): TestResponse

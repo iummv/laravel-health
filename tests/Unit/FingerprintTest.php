@@ -1,6 +1,6 @@
 <?php
 
-use Iummv\HealthEndpoint\Errors\Fingerprint;
+use Iummv\LaravelHealth\Errors\Fingerprint;
 
 it('matches the monitor\'s test vectors', function (?string $class, ?string $file, ?int $line, string $message, string $expected) {
     expect(Fingerprint::make($class, $file, $line, $message))->toBe($expected);

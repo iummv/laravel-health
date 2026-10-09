@@ -1,6 +1,6 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Errors;
+namespace Iummv\LaravelHealth\Errors;
 
 use Throwable;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Http\Middleware;
+namespace Iummv\LaravelHealth\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -24,7 +24,7 @@ class VerifyHealthToken
 
     public static function configuredToken(): ?string
     {
-        $token = config('health-endpoint.token');
+        $token = config('laravel-health.token');
 
         return is_string($token) && $token !== '' ? $token : null;
     }

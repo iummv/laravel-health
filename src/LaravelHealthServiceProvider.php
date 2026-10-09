@@ -1,25 +1,25 @@
 <?php
 
-namespace Iummv\HealthEndpoint;
+namespace Iummv\LaravelHealth;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Iummv\HealthEndpoint\Console\PruneErrorsCommand;
-use Iummv\HealthEndpoint\Errors\ErrorRecorder;
-use Iummv\HealthEndpoint\Errors\FrameResolver;
-use Iummv\HealthEndpoint\Http\Controllers\ErrorsController;
-use Iummv\HealthEndpoint\Http\Controllers\HealthController;
-use Iummv\HealthEndpoint\Http\Middleware\ThrottleHealthRequests;
-use Iummv\HealthEndpoint\Http\Middleware\VerifyHealthToken;
+use Iummv\LaravelHealth\Console\PruneErrorsCommand;
+use Iummv\LaravelHealth\Errors\ErrorRecorder;
+use Iummv\LaravelHealth\Errors\FrameResolver;
+use Iummv\LaravelHealth\Http\Controllers\ErrorsController;
+use Iummv\LaravelHealth\Http\Controllers\HealthController;
+use Iummv\LaravelHealth\Http\Middleware\ThrottleHealthRequests;
+use Iummv\LaravelHealth\Http\Middleware\VerifyHealthToken;
 
-class HealthEndpointServiceProvider extends ServiceProvider
+class LaravelHealthServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/health-endpoint.php', 'health-endpoint');
+        $this->mergeConfigFrom(__DIR__.'/../config/laravel-health.php', 'laravel-health');
 
         $this->app->singleton(FrameResolver::class, fn ($app) => new FrameResolver($app->basePath()));
         $this->app->singleton(ErrorRecorder::class);
@@ -35,17 +35,17 @@ class HealthEndpointServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/health-endpoint.php' => config_path('health-endpoint.php'),
-            ], 'health-endpoint-config');
+                __DIR__.'/../config/laravel-health.php' => config_path('laravel-health.php'),
+            ], 'laravel-health-config');
 
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], 'health-endpoint-migrations');
+            ], 'laravel-health-migrations');
 
             $this->commands([PruneErrorsCommand::class]);
 
             $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
-                if (config('health-endpoint.errors.enabled')) {
+                if (config('laravel-health.errors.enabled')) {
                     $schedule->command(PruneErrorsCommand::class)->daily();
                 }
             });
@@ -54,13 +54,13 @@ class HealthEndpointServiceProvider extends ServiceProvider
 
     protected function registerRoutes(): void
     {
-        $path = trim((string) config('health-endpoint.path', 'health'), '/') ?: 'health';
+        $path = trim((string) config('laravel-health.path', 'health'), '/') ?: 'health';
 
         // No "web" or "api" group: the routes need no session, cookies or CSRF.
         // The token is checked first, so a caller without it only ever sees 404.
         Route::middleware([VerifyHealthToken::class, ThrottleHealthRequests::class])->group(function () use ($path) {
-            Route::get($path, HealthController::class)->name('health-endpoint.health');
-            Route::get($path.'/errors', ErrorsController::class)->name('health-endpoint.errors');
+            Route::get($path, HealthController::class)->name('laravel-health.health');
+            Route::get($path.'/errors', ErrorsController::class)->name('laravel-health.errors');
         });
     }
 }

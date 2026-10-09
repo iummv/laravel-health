@@ -1,11 +1,11 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Http\Controllers;
+namespace Iummv\LaravelHealth\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Iummv\HealthEndpoint\Errors\ErrorSummary;
-use Iummv\HealthEndpoint\Support\AppName;
+use Iummv\LaravelHealth\Errors\ErrorSummary;
+use Iummv\LaravelHealth\Support\AppName;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -15,7 +15,7 @@ class ErrorsController
 
     public function __invoke(Request $request, ErrorSummary $summary): JsonResponse
     {
-        if (! config('health-endpoint.errors.enabled')) {
+        if (! config('laravel-health.errors.enabled')) {
             throw new NotFoundHttpException;
         }
 

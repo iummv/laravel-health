@@ -1,23 +1,23 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Http\Controllers;
+namespace Iummv\LaravelHealth\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Iummv\HealthEndpoint\Queues\QueueInspector;
-use Iummv\HealthEndpoint\Support\AppName;
+use Iummv\LaravelHealth\Queues\QueueInspector;
+use Iummv\LaravelHealth\Support\AppName;
 use Throwable;
 
 class HealthController
 {
-    public const CACHE_KEY = 'health-endpoint:health';
+    public const CACHE_KEY = 'laravel-health:health';
 
     public const VERSION = 1;
 
     public function __invoke(QueueInspector $inspector): JsonResponse
     {
-        $seconds = (int) config('health-endpoint.cache_seconds', 10);
+        $seconds = (int) config('laravel-health.cache_seconds', 10);
 
         if ($seconds <= 0) {
             return response()->json($this->collect($inspector));

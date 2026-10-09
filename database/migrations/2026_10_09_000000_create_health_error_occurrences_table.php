@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function getConnection(): ?string
     {
-        return config('health-endpoint.errors.connection');
+        return config('laravel-health.errors.connection');
     }
 
     public function up(): void

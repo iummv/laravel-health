@@ -1,5 +1,5 @@
 <?php
 
-use Iummv\HealthEndpoint\Tests\TestCase;
+use Iummv\LaravelHealth\Tests\TestCase;
 
 uses(TestCase::class)->in('Feature', 'Unit');

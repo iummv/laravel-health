@@ -1,6 +1,6 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Queues;
+namespace Iummv\LaravelHealth\Queues;
 
 use Closure;
 use Illuminate\Contracts\Container\Container;
@@ -25,7 +25,7 @@ class QueueInspector
         $workload = $this->horizonWorkload();
         $queues = [];
 
-        foreach (QueueList::parse(config('health-endpoint.queues')) as $queue) {
+        foreach (QueueList::parse(config('laravel-health.queues')) as $queue) {
             $queues[] = $this->inspectQueue($queue['connection'], $queue['name'], $workload);
         }
 

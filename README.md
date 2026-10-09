@@ -34,7 +34,7 @@ composer require iummv/laravel-health
 The service provider is auto-discovered. To change defaults beyond the environment values below, publish the config:
 
 ```bash
-php artisan vendor:publish --tag=health-endpoint-config
+php artisan vendor:publish --tag=laravel-health-config
 ```
 
 ## 3. Environment
@@ -77,11 +77,11 @@ HEALTH_QUEUES=default,sync,redis:reports
 php artisan migrate
 ```
 
-This creates `health_error_occurrences`. The migration is loaded from the package, so the deploy script's usual `migrate` is enough. To copy it into the app instead: `php artisan vendor:publish --tag=health-endpoint-migrations`.
+This creates `health_error_occurrences`. The migration is loaded from the package, so the deploy script's usual `migrate` is enough. To copy it into the app instead: `php artisan vendor:publish --tag=laravel-health-migrations`.
 
 If `HEALTH_ERRORS_CONNECTION` is set, the table is created on that connection.
 
-Old occurrences are deleted by `php artisan health-endpoint:prune`, which the package adds to the app's schedule daily. It needs the app's scheduler (`schedule:run`) to be running.
+Old occurrences are deleted by `php artisan laravel-health:prune`, which the package adds to the app's schedule daily. It needs the app's scheduler (`schedule:run`) to be running.
 
 ## 5. Check by hand
 

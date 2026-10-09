@@ -22,18 +22,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Iummv\\HealthEndpoint\\": "src/"
+            "Iummv\\LaravelHealth\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Iummv\\HealthEndpoint\\Tests\\": "tests/"
+            "Iummv\\LaravelHealth\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Iummv\\HealthEndpoint\\HealthEndpointServiceProvider"
+                "Iummv\\LaravelHealth\\LaravelHealthServiceProvider"
             ]
         }
     },

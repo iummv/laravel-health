@@ -1,6 +1,6 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Http\Middleware;
+namespace Iummv\LaravelHealth\Http\Middleware;
 
 use Closure;
 use Illuminate\Cache\RateLimiter;
@@ -14,7 +14,7 @@ class ThrottleHealthRequests
 
     public function handle(Request $request, Closure $next): Response
     {
-        $key = 'health-endpoint:'.sha1((string) $request->ip());
+        $key = 'laravel-health:'.sha1((string) $request->ip());
 
         // The limiter lives in the cache. If the cache is down, let the
         // request through rather than answer the monitor with a 500.

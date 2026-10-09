@@ -1,6 +1,6 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Tests\Fixtures;
+namespace Iummv\LaravelHealth\Tests\Fixtures;
 
 use Illuminate\Support\Facades\DB;
 

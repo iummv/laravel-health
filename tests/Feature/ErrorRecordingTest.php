@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
-use Iummv\HealthEndpoint\Errors\Fingerprint;
-use Iummv\HealthEndpoint\Errors\FrameResolver;
-use Iummv\HealthEndpoint\Errors\Occurrences;
-use Iummv\HealthEndpoint\Tests\Fixtures\BrokenService;
+use Iummv\LaravelHealth\Errors\Fingerprint;
+use Iummv\LaravelHealth\Errors\FrameResolver;
+use Iummv\LaravelHealth\Errors\Occurrences;
+use Iummv\LaravelHealth\Tests\Fixtures\BrokenService;
 
 function occurrences()
 {
@@ -64,7 +64,7 @@ it('records levels above error and honours a lower configured level', function (
 
     expect(occurrences()->pluck('level')->all())->toBe(['critical', 'emergency']);
 
-    config(['health-endpoint.errors.level' => 'warning']);
+    config(['laravel-health.errors.level' => 'warning']);
 
     Log::warning('Slow query');
     Log::notice('A notice');
@@ -163,7 +163,7 @@ it('does not record an error raised while recording', function () {
 });
 
 it('stops writing at the storm guard limit and resumes the next minute', function () {
-    config(['health-endpoint.errors.max_per_minute' => 5]);
+    config(['laravel-health.errors.max_per_minute' => 5]);
 
     foreach (range(1, 20) as $i) {
         Log::error("Storm {$i}");
@@ -179,7 +179,7 @@ it('stops writing at the storm guard limit and resumes the next minute', functio
 });
 
 it('still limits per process when the cache cannot count', function () {
-    config(['health-endpoint.errors.max_per_minute' => 3]);
+    config(['laravel-health.errors.max_per_minute' => 3]);
 
     Cache::shouldReceive('add')->andThrow(new RuntimeException('Cache is down'));
 
@@ -191,7 +191,7 @@ it('still limits per process when the cache cannot count', function () {
 });
 
 it('records nothing when errors are disabled', function () {
-    config(['health-endpoint.errors.enabled' => false]);
+    config(['laravel-health.errors.enabled' => false]);
 
     Log::error('Not recorded');
     report(new RuntimeException('Not recorded'));
@@ -200,7 +200,7 @@ it('records nothing when errors are disabled', function () {
 });
 
 it('records nothing when no token is configured', function () {
-    config(['health-endpoint.token' => null]);
+    config(['laravel-health.token' => null]);
 
     Log::error('Not recorded');
 
@@ -210,7 +210,7 @@ it('records nothing when no token is configured', function () {
 it('writes to the configured connection', function () {
     config([
         'database.connections.health' => ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => ''],
-        'health-endpoint.errors.connection' => 'health',
+        'laravel-health.errors.connection' => 'health',
     ]);
 
     $this->artisan('migrate', ['--database' => 'health'])->run();

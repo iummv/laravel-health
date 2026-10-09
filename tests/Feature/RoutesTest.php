@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Iummv\HealthEndpoint\Http\Middleware\ThrottleHealthRequests;
-use Iummv\HealthEndpoint\Tests\TestCase;
+use Iummv\LaravelHealth\Http\Middleware\ThrottleHealthRequests;
+use Iummv\LaravelHealth\Tests\TestCase;
 
 dataset('routes', ['/health', '/health/errors']);
 
@@ -16,7 +16,7 @@ it('returns 404 with a wrong token', function (string $uri) {
 })->with('routes');
 
 it('returns 404 for everyone when no token is configured', function (string $uri, mixed $configured) {
-    config(['health-endpoint.token' => $configured]);
+    config(['laravel-health.token' => $configured]);
 
     $this->getJson($uri)->assertNotFound();
     $this->getJson($uri, ['X-Health-Token' => ''])->assertNotFound();
@@ -34,7 +34,7 @@ it('accepts GET only', function (string $uri) {
 })->with('routes');
 
 it('registers the routes outside api/ and without the web group', function () {
-    foreach (['health-endpoint.health' => 'health', 'health-endpoint.errors' => 'health/errors'] as $name => $uri) {
+    foreach (['laravel-health.health' => 'health', 'laravel-health.errors' => 'health/errors'] as $name => $uri) {
         $route = Route::getRoutes()->getByName($name);
 
         expect($route)->not->toBeNull()

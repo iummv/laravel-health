@@ -1,6 +1,6 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Errors;
+namespace Iummv\LaravelHealth\Errors;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +13,6 @@ class Occurrences
 
     public static function query(): Builder
     {
-        return DB::connection(config('health-endpoint.errors.connection'))->table(self::TABLE);
+        return DB::connection(config('laravel-health.errors.connection'))->table(self::TABLE);
     }
 }

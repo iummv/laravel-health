@@ -4,11 +4,11 @@ use Illuminate\Queue\Failed\FailedJobProviderInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Queue;
-use Iummv\HealthEndpoint\Http\Middleware\ThrottleHealthRequests;
-use Iummv\HealthEndpoint\Queues\QueueInspector;
-use Iummv\HealthEndpoint\Queues\QueueList;
-use Iummv\HealthEndpoint\Tests\Fixtures\FakeConnector;
-use Iummv\HealthEndpoint\Tests\Fixtures\FakeQueue;
+use Iummv\LaravelHealth\Http\Middleware\ThrottleHealthRequests;
+use Iummv\LaravelHealth\Queues\QueueInspector;
+use Iummv\LaravelHealth\Queues\QueueList;
+use Iummv\LaravelHealth\Tests\Fixtures\FakeConnector;
+use Iummv\LaravelHealth\Tests\Fixtures\FakeQueue;
 
 function fakeConnection(string $name, ?FakeQueue $queue): void
 {
@@ -43,7 +43,7 @@ it('returns the contract shape with every field present', function () {
 });
 
 it('uses the configured app name', function () {
-    config(['health-endpoint.app' => 'paper']);
+    config(['laravel-health.app' => 'paper']);
 
     $this->health()->assertJsonPath('app', 'paper');
 });
@@ -79,7 +79,7 @@ it('reports a null age for an empty queue', function () {
 });
 
 it('counts failed jobs per connection and queue', function () {
-    config(['health-endpoint.queues' => 'default,mail']);
+    config(['laravel-health.queues' => 'default,mail']);
 
     $this->failedJob('database', 'default');
     $this->failedJob('database', 'default');
@@ -128,7 +128,7 @@ it('reports null workers without Horizon', function () {
 });
 
 it('reports Horizon worker counts, matching on the queue name', function () {
-    config(['health-endpoint.queues' => 'default,emails,notifications,reports,unsupervised']);
+    config(['laravel-health.queues' => 'default,emails,notifications,reports,unsupervised']);
 
     // The shape of Laravel\Horizon\Repositories\RedisWorkloadRepository::get().
     $this->app->bind(QueueInspector::HORIZON_WORKLOAD, fn () => new class
@@ -164,7 +164,7 @@ it('reports null workers when Horizon cannot be read', function () {
 });
 
 it('lists a queue whose connection throws with null counters', function () {
-    config(['health-endpoint.queues' => 'default,dead:reports,flaky:imports,missing:exports']);
+    config(['laravel-health.queues' => 'default,dead:reports,flaky:imports,missing:exports']);
 
     fakeConnection('dead', null);
     fakeConnection('flaky', new FakeQueue(throws: true));
@@ -188,7 +188,7 @@ it('lists a queue whose connection throws with null counters', function () {
 });
 
 it('reads connection:queue entries from the named connection', function () {
-    config(['health-endpoint.queues' => 'default,redis:reports']);
+    config(['laravel-health.queues' => 'default,redis:reports']);
 
     // Redis is covered with a fake connection: no Redis server is started for tests.
     fakeConnection('redis', new FakeQueue([
@@ -210,7 +210,7 @@ it('reads connection:queue entries from the named connection', function () {
 });
 
 it('never reports a negative age and nulls anything that is not a whole number', function () {
-    config(['health-endpoint.queues' => 'fake:a,fake:b']);
+    config(['laravel-health.queues' => 'fake:a,fake:b']);
 
     fakeConnection('fake', new FakeQueue([
         'a' => ['pending' => '7', 'delayed' => -1, 'reserved' => 'n/a', 'oldest' => Carbon::now()->getTimestamp() + 30],
@@ -226,7 +226,7 @@ it('never reports a negative age and nulls anything that is not a whole number',
 });
 
 it('treats every entry as a queue name, including one named sync', function () {
-    config(['health-endpoint.queues' => ' default , sync ,, default ']);
+    config(['laravel-health.queues' => ' default , sync ,, default ']);
 
     $now = Carbon::now()->getTimestamp();
     $this->job('sync', $now - 9);
@@ -258,7 +258,7 @@ it('parses the queue list', function () {
 });
 
 it('caches the body and shows the collection time', function () {
-    config(['health-endpoint.cache_seconds' => 10]);
+    config(['laravel-health.cache_seconds' => 10]);
 
     $this->health()->assertJsonPath('timestamp', '2026-10-09T10:00:00Z')->assertJsonPath('queues.0.pending', 0);
 
@@ -273,7 +273,7 @@ it('caches the body and shows the collection time', function () {
 });
 
 it('does not cache when cache_seconds is 0', function () {
-    config(['health-endpoint.cache_seconds' => 0]);
+    config(['laravel-health.cache_seconds' => 0]);
 
     $this->health()->assertJsonPath('queues.0.pending', 0);
 

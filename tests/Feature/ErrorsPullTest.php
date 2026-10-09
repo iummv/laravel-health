@@ -3,7 +3,7 @@
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
-use Iummv\HealthEndpoint\Errors\Occurrences;
+use Iummv\LaravelHealth\Errors\Occurrences;
 
 beforeEach(function () {
     Carbon::setTestNow('2026-10-09 10:00:00');
@@ -254,7 +254,7 @@ it('answers 200 with the caller\'s cursor when the table cannot be read', functi
 });
 
 it('returns 404 for the errors route when errors are disabled', function () {
-    config(['health-endpoint.errors.enabled' => false]);
+    config(['laravel-health.errors.enabled' => false]);
 
     $this->errors()->assertNotFound();
     $this->health()->assertOk();

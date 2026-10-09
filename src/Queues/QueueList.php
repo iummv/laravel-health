@@ -1,6 +1,6 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Queues;
+namespace Iummv\LaravelHealth\Queues;
 
 class QueueList
 {

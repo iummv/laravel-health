@@ -1,23 +1,23 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Console;
+namespace Iummv\LaravelHealth\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Iummv\HealthEndpoint\Errors\ErrorSummary;
-use Iummv\HealthEndpoint\Errors\Occurrences;
+use Iummv\LaravelHealth\Errors\ErrorSummary;
+use Iummv\LaravelHealth\Errors\Occurrences;
 use Throwable;
 
 class PruneErrorsCommand extends Command
 {
-    protected $signature = 'health-endpoint:prune';
+    protected $signature = 'laravel-health:prune';
 
     protected $description = 'Delete recorded error occurrences older than the configured hours';
 
     public function handle(): int
     {
         // Never keep less than a first pull asks for.
-        $hours = max(ErrorSummary::FIRST_PULL_HOURS, (int) config('health-endpoint.errors.keep_hours', 48));
+        $hours = max(ErrorSummary::FIRST_PULL_HOURS, (int) config('laravel-health.errors.keep_hours', 48));
 
         try {
             $deleted = Occurrences::query()

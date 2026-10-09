@@ -1,11 +1,11 @@
 <?php
 
-namespace Iummv\HealthEndpoint\Errors;
+namespace Iummv\LaravelHealth\Errors;
 
 use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Iummv\HealthEndpoint\Http\Middleware\VerifyHealthToken;
+use Iummv\LaravelHealth\Http\Middleware\VerifyHealthToken;
 use Throwable;
 
 class ErrorRecorder
@@ -60,12 +60,12 @@ class ErrorRecorder
     protected function record(MessageLogged $event): void
     {
         // With no token configured nobody could read the result.
-        if (! config('health-endpoint.errors.enabled') || VerifyHealthToken::configuredToken() === null) {
+        if (! config('laravel-health.errors.enabled') || VerifyHealthToken::configuredToken() === null) {
             return;
         }
 
         $level = strtolower((string) $event->level);
-        $threshold = self::LEVELS[strtolower((string) config('health-endpoint.errors.level'))] ?? self::LEVELS['error'];
+        $threshold = self::LEVELS[strtolower((string) config('laravel-health.errors.level'))] ?? self::LEVELS['error'];
 
         if (! isset(self::LEVELS[$level]) || self::LEVELS[$level] < $threshold) {
             return;
@@ -111,7 +111,7 @@ class ErrorRecorder
      */
     protected function overLimit(): bool
     {
-        $max = (int) config('health-endpoint.errors.max_per_minute', 120);
+        $max = (int) config('laravel-health.errors.max_per_minute', 120);
 
         if ($max <= 0) {
             return false;
@@ -120,7 +120,7 @@ class ErrorRecorder
         $minute = Carbon::now('UTC')->format('YmdHi');
 
         try {
-            $key = 'health-endpoint:errors:'.$minute;
+            $key = 'laravel-health:errors:'.$minute;
 
             Cache::add($key, 0, 120);
 
