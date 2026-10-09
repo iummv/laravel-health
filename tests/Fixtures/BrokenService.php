@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class BrokenService
 {
-    public const LINE = 14;
+    public const LINE = 13;
 
     public function run(): void
     {
