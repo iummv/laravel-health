@@ -1,5 +1,41 @@
+# Dependencies
 /vendor/
+/node_modules/
 /composer.lock
+
+# Testing and coverage
 /.phpunit.cache/
 /.phpunit.result.cache
+/phpunit.xml.bak
+/clover.xml
+/coverage/
+/build/
+
+# Tool caches
+/.php-cs-fixer.cache
+/.phpstan.cache/
+/phpstan-baseline.neon.bak
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDEs and editors
+/.idea/
+/.vscode/
+/.fleet/
+/.zed/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local notes
 /health-endpoint-package-handover.md

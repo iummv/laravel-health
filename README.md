@@ -1,5 +1,9 @@
 # iummv/laravel-health
 
+[![Tests](https://github.com/iummv/laravel-health/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/iummv/laravel-health/actions/workflows/tests.yml)
+[![Coverage](.github/coverage.svg)](https://github.com/iummv/laravel-health/actions/workflows/tests.yml)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/iummv/laravel-health.svg)](https://packagist.org/packages/iummv/laravel-health)
+
 Adds two token-protected JSON routes to a Laravel app for the IUM monitor to poll:
 
 | Route | Polled | Returns |
